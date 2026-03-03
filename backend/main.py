@@ -17,10 +17,14 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Allow frontend to connect
+# Allow frontend to connect (add your Vercel URL to ALLOWED_ORIGINS env var)
+allowed = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173"
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:5173"],
+    allow_origins=[o.strip() for o in allowed.split(",")],
     allow_methods=["*"],
     allow_headers=["*"],
 )
