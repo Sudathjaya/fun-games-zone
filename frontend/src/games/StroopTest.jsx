@@ -105,10 +105,7 @@ export default function StroopTest({ onBack, game }) {
           </div>
 
           {/* The word */}
-          <div className={`text-6xl sm:text-8xl font-black transition-all duration-200 select-none
-                           ${feedback === 'correct' ? 'scale-110' : feedback === 'wrong' ? 'opacity-40' : ''}`}
-               style={{ color: q.ink.tw.replace('text-', '').includes('-') ? undefined : 'white' }}
-               className={`${q.ink.tw} text-6xl sm:text-8xl font-black select-none transition-all
+          <div className={`${q.ink.tw} text-6xl sm:text-8xl font-black select-none transition-all duration-200
                            ${feedback === 'correct' ? 'scale-110' : feedback === 'wrong' ? 'opacity-40' : ''}`}>
             {q.word.name}
           </div>
