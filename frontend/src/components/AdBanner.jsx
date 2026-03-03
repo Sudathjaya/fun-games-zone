@@ -34,7 +34,7 @@ const AD_SLOTS = {
   rectangle: 'YOUR_RECTANGLE_SLOT_ID', // medium rectangle 300×250
   small:     'YOUR_SMALL_SLOT_ID',     // small banner
 };
-const ADS_ENABLED = false; // ← change to true after AdSense approval
+const ADS_ENABLED = true; // ← change to true after AdSense approval
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function AdBanner({ size = 'banner', className = '' }) {
