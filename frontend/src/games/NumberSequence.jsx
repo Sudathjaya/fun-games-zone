@@ -84,7 +84,7 @@ export default function NumberSequence({ onBack, game }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-900 via-orange-900 to-red-900">
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={stage === 'playing' && <span className="text-white font-bold">{idx + 1}/{TOTAL}</span>}
       />

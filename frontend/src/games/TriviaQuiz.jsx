@@ -82,7 +82,7 @@ export default function TriviaQuiz({ onBack, game }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-teal-900 to-cyan-900">
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={stage === 'playing' && (
           <span className={`font-black text-lg ${timer <= 5 ? 'text-red-400 animate-pulse' : 'text-white'}`}>

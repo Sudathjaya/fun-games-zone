@@ -67,7 +67,7 @@ export default function StroopTest({ onBack, game }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={stage === 'playing' && <span className="text-white font-bold">{qNum + 1}/{TOTAL}</span>}
       />

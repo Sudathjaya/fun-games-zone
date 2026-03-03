@@ -50,7 +50,7 @@ export default function BreathingExercise({ onBack, game }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 via-blue-900 to-indigo-900 flex flex-col">
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={<span className="text-white/70 text-sm">🌀 {cycles} cycles</span>}
       />

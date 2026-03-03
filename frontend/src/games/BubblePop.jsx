@@ -58,7 +58,7 @@ export default function BubblePop({ onBack, game }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-300 via-blue-400 to-indigo-500 select-none">
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={<span className="font-bold text-white text-sm">💥 {score} popped</span>}
       />

@@ -72,7 +72,7 @@ export default function ReactionTest({ onBack, game }) {
   return (
     <div className={`min-h-screen bg-gradient-to-br ${bgColor} transition-colors duration-300 flex flex-col`}>
       <GameHeader
-        title={game.name}
+        game={game}
         onBack={onBack}
         extra={stage !== 'intro' && stage !== 'done' && (
           <span className="text-white/70 text-sm">{Math.min(times.length + 1, ROUNDS)}/{ROUNDS}</span>
