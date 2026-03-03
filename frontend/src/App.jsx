@@ -9,6 +9,12 @@ import Snake from './games/Snake';
 import WhackAMole from './games/WhackAMole';
 import SimonSays from './games/SimonSays';
 import MathQuiz from './games/MathQuiz';
+import BubblePop from './games/BubblePop';
+import BreathingExercise from './games/BreathingExercise';
+import StroopTest from './games/StroopTest';
+import TriviaQuiz from './games/TriviaQuiz';
+import ReactionTest from './games/ReactionTest';
+import NumberSequence from './games/NumberSequence';
 
 const GAMES = [
   {
@@ -97,7 +103,75 @@ const GAMES = [
     tags: ['Solo', 'Education'],
     difficulty: 'Easy',
     component: MathQuiz,
-    category: ['all', 'elders', 'kids'],
+    category: ['all', 'elders', 'kids', 'brain'],
+  },
+  // ── Stress Release ──────────────────────────────────────────────────────────
+  {
+    id: 'bubblepop',
+    name: 'Bubble Pop',
+    description: 'Pop colorful bubbles with no timer or pressure. Pure relaxation!',
+    icon: '🫧',
+    gradient: 'from-sky-400 to-blue-500',
+    tags: ['Relax', 'No Timer'],
+    difficulty: 'Easy',
+    component: BubblePop,
+    category: ['all', 'elders', 'kids', 'relax'],
+  },
+  {
+    id: 'breathing',
+    name: 'Breathing Exercise',
+    description: 'Guided box breathing to calm your mind and reduce stress.',
+    icon: '🌬️',
+    gradient: 'from-slate-600 to-indigo-700',
+    tags: ['Relax', 'Wellness'],
+    difficulty: 'Easy',
+    component: BreathingExercise,
+    category: ['all', 'elders', 'relax'],
+  },
+  // ── Brain / IQ ──────────────────────────────────────────────────────────────
+  {
+    id: 'stroop',
+    name: 'Stroop Test',
+    description: 'Name the ink color, not the word! Classic cognitive brain challenge.',
+    icon: '🎨',
+    gradient: 'from-purple-600 to-indigo-700',
+    tags: ['IQ', 'Cognitive'],
+    difficulty: 'Hard',
+    component: StroopTest,
+    category: ['all', 'elders', 'brain'],
+  },
+  {
+    id: 'trivia',
+    name: 'Trivia Quiz',
+    description: 'Test your general knowledge! Science, nature, geography & more.',
+    icon: '🧠',
+    gradient: 'from-emerald-500 to-teal-600',
+    tags: ['Knowledge', 'IQ'],
+    difficulty: 'Medium',
+    component: TriviaQuiz,
+    category: ['all', 'elders', 'brain'],
+  },
+  {
+    id: 'reaction',
+    name: 'Reaction Test',
+    description: 'How fast are your reflexes? Tap when the screen turns green!',
+    icon: '⚡',
+    gradient: 'from-yellow-500 to-red-500',
+    tags: ['Reflex', 'Speed'],
+    difficulty: 'Medium',
+    component: ReactionTest,
+    category: ['all', 'kids', 'brain'],
+  },
+  {
+    id: 'sequence',
+    name: 'Number Sequence',
+    description: 'Find the missing number in the pattern. Train your logical thinking!',
+    icon: '🔢',
+    gradient: 'from-amber-500 to-orange-600',
+    tags: ['IQ', 'Logic'],
+    difficulty: 'Medium',
+    component: NumberSequence,
+    category: ['all', 'elders', 'brain'],
   },
 ];
 
@@ -105,6 +179,8 @@ const FILTERS = [
   { id: 'all',    label: 'All Games', icon: '🎮' },
   { id: 'kids',   label: 'Kids',      icon: '👶' },
   { id: 'elders', label: 'Elders',    icon: '👴' },
+  { id: 'brain',  label: 'Brain/IQ',  icon: '🧠' },
+  { id: 'relax',  label: 'Relax',     icon: '😌' },
 ];
 
 export default function App() {
