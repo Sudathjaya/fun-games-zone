@@ -32,7 +32,7 @@ const PUBLISHER_ID = 'ca-pub-3194091975690498';
 const AD_SLOTS = {
   banner:    '2184627125',
   rectangle: '7737316640',
-  small:     '2184627125',
+  small:     '9018608720',
 };
 const ADS_ENABLED = true; // ← change to true after AdSense approval
 // ─────────────────────────────────────────────────────────────────────────────
