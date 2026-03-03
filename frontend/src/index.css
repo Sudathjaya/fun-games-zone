@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply antialiased;
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+@layer components {
+  .card-flip {
+    perspective: 1000px;
+  }
+
+  .card-flip-inner {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+  }
+
+  .card-flip.flipped .card-flip-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-back {
+    transform: rotateY(180deg);
+  }
+
+  .game-btn {
+    @apply px-6 py-3 rounded-xl font-bold text-lg transition-all duration-200
+           hover:scale-105 active:scale-95 cursor-pointer shadow-md hover:shadow-lg;
+  }
+
+  .game-btn-primary {
+    @apply game-btn bg-gradient-to-r from-violet-600 to-indigo-600 text-white
+           hover:from-violet-500 hover:to-indigo-500;
+  }
+
+  .game-btn-success {
+    @apply game-btn bg-gradient-to-r from-emerald-500 to-teal-500 text-white
+           hover:from-emerald-400 hover:to-teal-400;
+  }
+
+  .game-btn-danger {
+    @apply game-btn bg-gradient-to-r from-rose-500 to-pink-500 text-white
+           hover:from-rose-400 hover:to-pink-400;
+  }
+
+  .game-btn-warning {
+    @apply game-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white
+           hover:from-amber-300 hover:to-orange-300;
+  }
+
+  .game-panel {
+    @apply bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6;
+  }
+
+  .game-header {
+    @apply flex items-center justify-between px-4 py-3
+           bg-white/20 backdrop-blur-sm rounded-2xl mb-4 shadow-md;
+  }
+
+  .score-badge {
+    @apply bg-white/30 backdrop-blur-sm rounded-xl px-4 py-2
+           text-white font-bold text-lg shadow-inner;
+  }
+
+  .mole-hole {
+    @apply relative cursor-pointer select-none;
+  }
+
+  .mole-hole::before {
+    content: '';
+    @apply absolute inset-0 rounded-full bg-black/40;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255,255,255,0.5);
+}
