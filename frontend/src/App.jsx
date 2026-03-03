@@ -19,6 +19,10 @@ import CheckersGame from './games/CheckersGame';
 import ChessGame from './games/ChessGame';
 import LudoGame from './games/LudoGame';
 import UnoGame from './games/UnoGame';
+import Game2048 from './games/Game2048';
+import SudokuGame from './games/SudokuGame';
+import SlidingPuzzle from './games/SlidingPuzzle';
+import Minesweeper from './games/Minesweeper';
 
 const GAMES = [
   {
@@ -177,6 +181,51 @@ const GAMES = [
     component: NumberSequence,
     category: ['all', 'elders', 'brain'],
   },
+  // ── Puzzle Games ─────────────────────────────────────────────────────────────
+  {
+    id: '2048',
+    name: '2048',
+    description: 'Slide and merge tiles to reach 2048! Use arrow keys or swipe.',
+    icon: '🔢',
+    gradient: 'from-amber-500 to-orange-600',
+    tags: ['Puzzle', 'Solo'],
+    difficulty: 'Medium',
+    component: Game2048,
+    category: ['all', 'elders', 'kids', 'brain', 'puzzle'],
+  },
+  {
+    id: 'sudoku',
+    name: 'Sudoku',
+    description: 'Fill the 9×9 grid so every row, column and box has digits 1–9.',
+    icon: '🔣',
+    gradient: 'from-blue-600 to-indigo-700',
+    tags: ['Puzzle', 'Logic'],
+    difficulty: 'Hard',
+    component: SudokuGame,
+    category: ['all', 'elders', 'brain', 'puzzle'],
+  },
+  {
+    id: 'sliding',
+    name: 'Sliding Puzzle',
+    description: 'Slide tiles into order! Choose from 3×3, 4×4 or 5×5 grids.',
+    icon: '🧩',
+    gradient: 'from-teal-500 to-cyan-600',
+    tags: ['Puzzle', 'Solo'],
+    difficulty: 'Medium',
+    component: SlidingPuzzle,
+    category: ['all', 'elders', 'kids', 'puzzle'],
+  },
+  {
+    id: 'minesweeper',
+    name: 'Minesweeper',
+    description: 'Reveal all safe cells without hitting a mine. Classic puzzle!',
+    icon: '💣',
+    gradient: 'from-gray-600 to-slate-800',
+    tags: ['Puzzle', 'Logic'],
+    difficulty: 'Hard',
+    component: Minesweeper,
+    category: ['all', 'elders', 'puzzle'],
+  },
   // ── Board Games ──────────────────────────────────────────────────────────────
   {
     id: 'checkers',
@@ -231,6 +280,7 @@ const FILTERS = [
   { id: 'brain',  label: 'Brain/IQ',  icon: '🧠' },
   { id: 'relax',  label: 'Relax',     icon: '😌' },
   { id: 'board',  label: 'Board',     icon: '♟' },
+  { id: 'puzzle', label: 'Puzzle',    icon: '🧩' },
 ];
 
 export default function App() {
