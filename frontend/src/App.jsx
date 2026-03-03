@@ -195,7 +195,7 @@ export default function App() {
 
           <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-5">
             <a
-              href="https://buymeacoffee.com"
+              href="https://buymeacoffee.com/sudathjaya"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300
