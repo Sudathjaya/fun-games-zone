@@ -28,7 +28,7 @@ const SIZE_CLASSES = {
 };
 
 // ─── YOUR AD SETTINGS (fill in after AdSense approval) ───────────────────────
-const PUBLISHER_ID = 'ca-pub-YOUR_PUBLISHER_ID'; // e.g. ca-pub-1234567890123456
+const PUBLISHER_ID = 'ca-pub-3194091975690498';
 const AD_SLOTS = {
   banner:    'YOUR_BANNER_SLOT_ID',    // leaderboard 728×90
   rectangle: 'YOUR_RECTANGLE_SLOT_ID', // medium rectangle 300×250
