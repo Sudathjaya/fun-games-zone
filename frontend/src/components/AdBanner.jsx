@@ -27,17 +27,47 @@ const SIZE_CLASSES = {
   small:     'h-10 md:h-12',  // Small banner
 };
 
-export default function AdBanner({ size = 'banner', slot = 'default', className = '' }) {
+// ─── YOUR AD SETTINGS (fill in after AdSense approval) ───────────────────────
+const PUBLISHER_ID = 'ca-pub-YOUR_PUBLISHER_ID'; // e.g. ca-pub-1234567890123456
+const AD_SLOTS = {
+  banner:    'YOUR_BANNER_SLOT_ID',    // leaderboard 728×90
+  rectangle: 'YOUR_RECTANGLE_SLOT_ID', // medium rectangle 300×250
+  small:     'YOUR_SMALL_SLOT_ID',     // small banner
+};
+const ADS_ENABLED = false; // ← change to true after AdSense approval
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function AdBanner({ size = 'banner', className = '' }) {
+  React.useEffect(() => {
+    if (ADS_ENABLED) {
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch {}
+    }
+  }, []);
+
+  if (ADS_ENABLED) {
+    return (
+      <div className={`w-full overflow-hidden ${className}`} aria-label="Advertisement">
+        <ins
+          className="adsbygoogle"
+          style={{ display: 'block' }}
+          data-ad-client={PUBLISHER_ID}
+          data-ad-slot={AD_SLOTS[size]}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
+      </div>
+    );
+  }
+
+  // Placeholder shown before AdSense approval
   return (
     <div
       className={`w-full flex items-center justify-center gap-2
                   bg-gray-100/80 border border-dashed border-gray-300
-                  rounded-xl overflow-hidden relative
+                  rounded-xl overflow-hidden
                   ${SIZE_CLASSES[size]} ${className}`}
-      data-ad-slot={slot}
       aria-label="Advertisement"
     >
-      {/* ── Replace this block with AdSense <ins> tag when approved ── */}
       <span className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold select-none">
         Advertisement
       </span>
