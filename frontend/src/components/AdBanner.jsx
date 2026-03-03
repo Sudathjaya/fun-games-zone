@@ -30,9 +30,9 @@ const SIZE_CLASSES = {
 // ─── YOUR AD SETTINGS (fill in after AdSense approval) ───────────────────────
 const PUBLISHER_ID = 'ca-pub-3194091975690498';
 const AD_SLOTS = {
-  banner:    'YOUR_BANNER_SLOT_ID',    // leaderboard 728×90
-  rectangle: 'YOUR_RECTANGLE_SLOT_ID', // medium rectangle 300×250
-  small:     'YOUR_SMALL_SLOT_ID',     // small banner
+  banner:    '2184627125',
+  rectangle: '2184627125',
+  small:     '2184627125',
 };
 const ADS_ENABLED = true; // ← change to true after AdSense approval
 // ─────────────────────────────────────────────────────────────────────────────
