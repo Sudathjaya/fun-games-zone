@@ -15,6 +15,10 @@ import StroopTest from './games/StroopTest';
 import TriviaQuiz from './games/TriviaQuiz';
 import ReactionTest from './games/ReactionTest';
 import NumberSequence from './games/NumberSequence';
+import CheckersGame from './games/CheckersGame';
+import ChessGame from './games/ChessGame';
+import LudoGame from './games/LudoGame';
+import UnoGame from './games/UnoGame';
 
 const GAMES = [
   {
@@ -173,6 +177,51 @@ const GAMES = [
     component: NumberSequence,
     category: ['all', 'elders', 'brain'],
   },
+  // ── Board Games ──────────────────────────────────────────────────────────────
+  {
+    id: 'checkers',
+    name: 'Checkers',
+    description: 'Classic draughts! Jump and capture all opponent pieces to win.',
+    icon: '🔴',
+    gradient: 'from-amber-700 to-red-800',
+    tags: ['Strategy', '2-Player'],
+    difficulty: 'Medium',
+    component: CheckersGame,
+    category: ['all', 'elders', 'kids', 'board'],
+  },
+  {
+    id: 'chess',
+    name: 'Chess',
+    description: 'The ultimate strategy game! Checkmate the king to win.',
+    icon: '♟',
+    gradient: 'from-gray-700 to-gray-900',
+    tags: ['Strategy', '2-Player'],
+    difficulty: 'Hard',
+    component: ChessGame,
+    category: ['all', 'elders', 'board'],
+  },
+  {
+    id: 'ludo',
+    name: 'Ludo',
+    description: 'Race your tokens home! Roll dice and send opponents back to start.',
+    icon: '🎲',
+    gradient: 'from-red-600 via-yellow-500 to-green-600',
+    tags: ['Family', '2-4 Players'],
+    difficulty: 'Easy',
+    component: LudoGame,
+    category: ['all', 'elders', 'kids', 'board'],
+  },
+  {
+    id: 'uno',
+    name: 'UNO',
+    description: 'Match colors and numbers! First to empty your hand wins. Don\'t forget UNO!',
+    icon: '🃏',
+    gradient: 'from-red-500 via-yellow-500 to-blue-500',
+    tags: ['Cards', '2-4 Players'],
+    difficulty: 'Easy',
+    component: UnoGame,
+    category: ['all', 'elders', 'kids', 'board'],
+  },
 ];
 
 const FILTERS = [
@@ -181,6 +230,7 @@ const FILTERS = [
   { id: 'elders', label: 'Elders',    icon: '👴' },
   { id: 'brain',  label: 'Brain/IQ',  icon: '🧠' },
   { id: 'relax',  label: 'Relax',     icon: '😌' },
+  { id: 'board',  label: 'Board',     icon: '♟' },
 ];
 
 export default function App() {
