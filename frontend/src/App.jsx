@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import GameCard from './components/GameCard';
 import AdBanner from './components/AdBanner';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import LoginModal from './components/LoginModal';
+import ProfilePage from './components/ProfilePage';
 import MemoryMatch from './games/MemoryMatch';
 import TicTacToe from './games/TicTacToe';
 import NumberGuessing from './games/NumberGuessing';
@@ -283,9 +286,16 @@ const FILTERS = [
   { id: 'puzzle', label: 'Puzzle',    icon: '🧩' },
 ];
 
-export default function App() {
+function AppInner() {
+  const { currentUser } = useAuth();
   const [currentGame, setCurrentGame] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [showLogin, setShowLogin] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  if (showProfile) {
+    return <ProfilePage onBack={() => setShowProfile(false)} games={GAMES} />;
+  }
 
   if (currentGame) {
     const game = GAMES.find(g => g.id === currentGame);
@@ -300,23 +310,49 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900">
 
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
+
       {/* ── Top Ad Banner ── */}
       <div className="px-3 pt-2">
         <AdBanner size="small" slot="home-top" className="max-w-5xl mx-auto" />
       </div>
 
       {/* ── Header ── */}
-      <header className="text-center pt-5 pb-4 px-4">
-        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-2xl mb-2 leading-tight">
-          🎮 Fun Games Zone
-        </h1>
-        <p className="text-sm sm:text-xl md:text-2xl text-violet-200 font-medium">
-          Games for Everyone — Kids, Elders &amp; All Ages!
-        </p>
-        <div className="flex justify-center gap-2 mt-2 text-lg sm:text-2xl">
-          {['⭐','🌟','✨','🌟','⭐'].map((s, i) => (
-            <span key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>{s}</span>
-          ))}
+      <header className="pt-5 pb-4 px-4">
+        {/* Auth bar */}
+        <div className="flex justify-end mb-2">
+          {currentUser ? (
+            <button onClick={() => setShowProfile(true)}
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white
+                         font-bold px-3 py-1.5 rounded-full text-sm transition-all hover:scale-105">
+              {currentUser.photoURL
+                ? <img src={currentUser.photoURL} alt="" className="w-6 h-6 rounded-full" referrerPolicy="no-referrer" />
+                : <span className="w-6 h-6 rounded-full bg-violet-500 flex items-center justify-center text-xs font-black">
+                    {(currentUser.displayName || '?')[0].toUpperCase()}
+                  </span>
+              }
+              {currentUser.displayName?.split(' ')[0] || 'Profile'}
+            </button>
+          ) : (
+            <button onClick={() => setShowLogin(true)}
+              className="bg-white/20 hover:bg-white/30 text-white font-bold px-4 py-1.5
+                         rounded-full text-sm transition-all hover:scale-105 border border-white/30">
+              🔑 Sign In
+            </button>
+          )}
+        </div>
+        <div className="text-center">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-2xl mb-2 leading-tight">
+            🎮 Fun Games Zone
+          </h1>
+          <p className="text-sm sm:text-xl md:text-2xl text-violet-200 font-medium">
+            Games for Everyone — Kids, Elders &amp; All Ages!
+          </p>
+          <div className="flex justify-center gap-2 mt-2 text-lg sm:text-2xl">
+            {['⭐','🌟','✨','🌟','⭐'].map((s, i) => (
+              <span key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>{s}</span>
+            ))}
+          </div>
         </div>
       </header>
 
@@ -424,5 +460,13 @@ export default function App() {
         <p className="mt-1 opacity-70">Ad revenue helps keep this site free. Thank you! ❤️</p>
       </footer>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppInner />
+    </AuthProvider>
   );
 }
