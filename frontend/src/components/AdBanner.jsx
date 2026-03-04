@@ -22,9 +22,15 @@ import React from 'react';
  */
 
 const SIZE_CLASSES = {
-  banner:    'h-14 md:h-20',   // Leaderboard 728×90
-  rectangle: 'h-48 md:h-64',  // Medium Rectangle 300×250
-  small:     'h-10 md:h-12',  // Small banner
+  banner:    'h-12 md:h-16',   // Leaderboard 728×90
+  rectangle: 'h-32 md:h-48',  // Medium Rectangle 300×250
+  small:     'h-8 md:h-10',   // Small banner
+};
+
+const MAX_HEIGHT = {
+  banner:    'max-h-16',
+  rectangle: 'max-h-48',
+  small:     'max-h-10',
 };
 
 // ─── YOUR AD SETTINGS (fill in after AdSense approval) ───────────────────────
@@ -46,7 +52,7 @@ export default function AdBanner({ size = 'banner', className = '' }) {
 
   if (ADS_ENABLED) {
     return (
-      <div className={`w-full overflow-hidden ${className}`} aria-label="Advertisement">
+      <div className={`w-full overflow-hidden ${MAX_HEIGHT[size]} ${className}`} aria-label="Advertisement">
         <ins
           className="adsbygoogle"
           style={{ display: 'block' }}

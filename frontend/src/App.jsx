@@ -341,7 +341,7 @@ export default function App() {
 
       {/* ── Games Grid ── */}
       <main className="max-w-7xl mx-auto px-3 sm:px-4 pb-6">
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
           {filteredGames.map((game, index) => (
             <div key={game.id} style={{ animationDelay: `${index * 0.08}s` }} className="animate-bounce-in">
               <GameCard game={game} onPlay={() => setCurrentGame(game.id)} />
