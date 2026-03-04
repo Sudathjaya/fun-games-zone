@@ -4,6 +4,7 @@ import AdBanner from './components/AdBanner';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoginModal from './components/LoginModal';
 import ProfilePage from './components/ProfilePage';
+import AboutPage from './components/AboutPage';
 import MemoryMatch from './games/MemoryMatch';
 import TicTacToe from './games/TicTacToe';
 import NumberGuessing from './games/NumberGuessing';
@@ -292,6 +293,11 @@ function AppInner() {
   const [filter, setFilter] = useState('all');
   const [showLogin, setShowLogin] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+
+  if (showAbout) {
+    return <AboutPage onBack={() => setShowAbout(false)} />;
+  }
 
   if (showProfile) {
     return <ProfilePage onBack={() => setShowProfile(false)} games={GAMES} />;
@@ -320,7 +326,12 @@ function AppInner() {
       {/* ── Header ── */}
       <header className="pt-5 pb-4 px-4">
         {/* Auth bar */}
-        <div className="flex justify-end mb-2">
+        <div className="flex justify-between items-center mb-2">
+          <button onClick={() => setShowAbout(true)}
+            className="bg-white/20 hover:bg-white/30 text-white font-bold px-4 py-1.5
+                       rounded-full text-sm transition-all hover:scale-105 border border-white/30">
+            ℹ️ About
+          </button>
           {currentUser ? (
             <button onClick={() => setShowProfile(true)}
               className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white
@@ -458,6 +469,10 @@ function AppInner() {
       <footer className="text-center pb-6 text-violet-300/50 text-xs px-4">
         <p>🎮 Fun Games Zone — Free games for everyone, always!</p>
         <p className="mt-1 opacity-70">Ad revenue helps keep this site free. Thank you! ❤️</p>
+        <button onClick={() => setShowAbout(true)}
+          className="mt-2 text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
+          About Us &amp; Contact
+        </button>
       </footer>
     </div>
   );
