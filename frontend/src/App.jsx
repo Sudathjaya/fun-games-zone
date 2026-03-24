@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LoginModal from './components/LoginModal';
 import ProfilePage from './components/ProfilePage';
 import AboutPage from './components/AboutPage';
+import PrivacyPolicyPage from './components/PrivacyPolicyPage';
+import TermsPage from './components/TermsPage';
 import MemoryMatch from './games/MemoryMatch';
 import TicTacToe from './games/TicTacToe';
 import NumberGuessing from './games/NumberGuessing';
@@ -33,6 +35,7 @@ const GAMES = [
     id: 'memory',
     name: 'Memory Match',
     description: 'Flip cards and find matching pairs! Great for brain training.',
+    howToPlay: 'Click any card to flip it over and reveal its emoji. Then click a second card — if they match, both stay face up. If they don\'t match, both flip back. Find all matching pairs to win! Try to remember where each card is to reduce your move count.',
     icon: '🎴',
     gradient: 'from-purple-500 to-violet-600',
     tags: ['All Ages', 'Brain'],
@@ -44,6 +47,7 @@ const GAMES = [
     id: 'tictactoe',
     name: 'Tic-Tac-Toe',
     description: 'Classic X vs O! Play against a friend or the computer.',
+    howToPlay: 'Players take turns placing their symbol (X or O) on a 3×3 grid. The first player to get three of their symbols in a row — horizontally, vertically, or diagonally — wins! Play against the computer AI or challenge a friend on the same device.',
     icon: '⭕',
     gradient: 'from-blue-500 to-cyan-600',
     tags: ['2 Players', 'Classic'],
@@ -55,6 +59,7 @@ const GAMES = [
     id: 'number',
     name: 'Number Guessing',
     description: 'Guess the secret number with helpful hints! How fast can you find it?',
+    howToPlay: 'A secret number has been chosen within a range (Easy: 1-20, Medium: 1-50, Hard: 1-100). Type your guess and hit Enter. You\'ll get a "Too High" or "Too Low" hint after each guess. Use the hints to narrow down the number — can you find it in the fewest guesses?',
     icon: '🔢',
     gradient: 'from-emerald-500 to-teal-600',
     tags: ['Solo', 'Logic'],
@@ -66,6 +71,7 @@ const GAMES = [
     id: 'word',
     name: 'Word Scramble',
     description: 'Unscramble the letters to find the hidden word. Beat the clock!',
+    howToPlay: 'A word has been scrambled and jumbled up — your job is to figure out what the original word is! Type your answer and press Enter or click Submit. Use the Hint button if you\'re stuck (costs points). You can also Reshuffle the letters to see them in a different order. Beat your streak by solving multiple words in a row!',
     icon: '📝',
     gradient: 'from-orange-500 to-amber-600',
     tags: ['Solo', 'Vocabulary'],
@@ -77,6 +83,7 @@ const GAMES = [
     id: 'snake',
     name: 'Snake',
     description: 'Guide your snake to eat food and grow longer without crashing!',
+    howToPlay: 'Use the arrow keys on your keyboard (or the on-screen D-pad on mobile) to steer the snake. Eat the red food to grow longer and earn points. Avoid hitting the walls or the snake\'s own body — either will end the game! The longer your snake grows, the higher your score. Choose from 3 speeds: Slow, Normal, or Fast.',
     icon: '🐍',
     gradient: 'from-green-500 to-emerald-600',
     tags: ['Solo', 'Arcade'],
@@ -88,6 +95,7 @@ const GAMES = [
     id: 'whackamole',
     name: 'Whack-a-Mole',
     description: 'Whack the moles as fast as you can before they disappear!',
+    howToPlay: 'Moles randomly pop up from 9 holes — tap or click them before they duck back down to score points! Watch out for bombs 💣 — hitting a bomb costs you points. Build up combos by whacking multiple moles quickly in a row for bonus points. You have 30 seconds — how high can you score?',
     icon: '🦔',
     gradient: 'from-yellow-500 to-orange-500',
     tags: ['Reflex', 'Fun'],
@@ -99,6 +107,7 @@ const GAMES = [
     id: 'simon',
     name: 'Simon Says',
     description: 'Watch the color pattern and repeat it! Each round gets longer.',
+    howToPlay: 'Simon will flash a sequence of colored buttons. Watch carefully! Then repeat the exact same sequence by clicking the buttons in the same order. Each round adds one more color to the sequence. One mistake and it\'s game over! How long a sequence can you remember? Great for training short-term memory.',
     icon: '🌈',
     gradient: 'from-pink-500 to-rose-600',
     tags: ['Memory', 'Pattern'],
@@ -110,6 +119,7 @@ const GAMES = [
     id: 'math',
     name: 'Math Quiz',
     description: 'Test your math skills! Addition, subtraction, and multiplication.',
+    howToPlay: 'Answer 10 math questions as quickly as possible. Each question shows a math problem with 4 multiple-choice answers — click the correct one. The faster you answer, the more bonus points you earn! Questions include addition, subtraction, multiplication, and division. Your results screen shows your score, accuracy, and time.',
     icon: '➕',
     gradient: 'from-indigo-500 to-blue-600',
     tags: ['Solo', 'Education'],
@@ -122,6 +132,7 @@ const GAMES = [
     id: 'bubblepop',
     name: 'Bubble Pop',
     description: 'Pop colorful bubbles with no timer or pressure. Pure relaxation!',
+    howToPlay: 'Simply click or tap the colorful floating bubbles to pop them! There\'s no timer, no score pressure, no winning or losing — just pure relaxation. New bubbles appear as you pop the existing ones. Perfect for a quick stress-relief break. Sit back, breathe, and enjoy popping!',
     icon: '🫧',
     gradient: 'from-sky-400 to-blue-500',
     tags: ['Relax', 'No Timer'],
@@ -133,6 +144,7 @@ const GAMES = [
     id: 'breathing',
     name: 'Breathing Exercise',
     description: 'Guided box breathing to calm your mind and reduce stress.',
+    howToPlay: 'Follow the animated breathing guide on screen. Breathe IN as the circle expands, HOLD your breath, then breathe OUT as it contracts. This is called "box breathing" — a technique used by athletes and therapists to reduce stress and anxiety. Just a few minutes of guided breathing can calm your nervous system and improve focus.',
     icon: '🌬️',
     gradient: 'from-slate-600 to-indigo-700',
     tags: ['Relax', 'Wellness'],
@@ -145,6 +157,7 @@ const GAMES = [
     id: 'stroop',
     name: 'Stroop Test',
     description: 'Name the ink color, not the word! Classic cognitive brain challenge.',
+    howToPlay: 'You\'ll see a color word (like "RED") written in a different ink color (like blue ink). Your job is to click the color of the INK, not what the word says. It sounds simple but your brain automatically reads the word, making this surprisingly tricky! This is the famous Stroop Effect — a classic psychology experiment that measures cognitive control and mental flexibility.',
     icon: '🎨',
     gradient: 'from-purple-600 to-indigo-700',
     tags: ['IQ', 'Cognitive'],
@@ -156,6 +169,7 @@ const GAMES = [
     id: 'trivia',
     name: 'Trivia Quiz',
     description: 'Test your general knowledge! Science, nature, geography & more.',
+    howToPlay: 'Answer multiple-choice trivia questions spanning science, history, geography, nature, and general knowledge. Select your answer from 4 options. After each question you\'ll see whether you were right or wrong, along with the correct answer. Your final score shows your knowledge rating — can you get a perfect 10/10?',
     icon: '🧠',
     gradient: 'from-emerald-500 to-teal-600',
     tags: ['Knowledge', 'IQ'],
@@ -167,6 +181,7 @@ const GAMES = [
     id: 'reaction',
     name: 'Reaction Test',
     description: 'How fast are your reflexes? Tap when the screen turns green!',
+    howToPlay: 'Wait for the screen to turn green, then tap or click as fast as you can! The screen will first show red — don\'t click yet or you\'ll get a penalty. When it flashes green, react immediately! Your reaction time is measured in milliseconds. The average human reaction time is 250ms — can you beat it? Take multiple rounds and see your average.',
     icon: '⚡',
     gradient: 'from-yellow-500 to-red-500',
     tags: ['Reflex', 'Speed'],
@@ -178,6 +193,7 @@ const GAMES = [
     id: 'sequence',
     name: 'Number Sequence',
     description: 'Find the missing number in the pattern. Train your logical thinking!',
+    howToPlay: 'Each puzzle shows a sequence of numbers with one number missing (shown as "?"). Study the pattern — is it adding, subtracting, multiplying, or something more complex? Enter the missing number and hit Submit. Each correct answer earns points and increases the difficulty. This game strengthens pattern recognition and logical reasoning skills.',
     icon: '🔢',
     gradient: 'from-amber-500 to-orange-600',
     tags: ['IQ', 'Logic'],
@@ -190,6 +206,7 @@ const GAMES = [
     id: '2048',
     name: '2048',
     description: 'Slide and merge tiles to reach 2048! Use arrow keys or swipe.',
+    howToPlay: 'Use the arrow keys (or swipe on mobile) to slide all tiles in one direction. When two tiles with the same number collide, they merge into one tile with their combined value. Keep merging tiles to reach the magical 2048 tile! The board fills up fast — plan your moves carefully to avoid running out of space. Tip: keep your highest tile in a corner!',
     icon: '🔢',
     gradient: 'from-amber-500 to-orange-600',
     tags: ['Puzzle', 'Solo'],
@@ -201,6 +218,7 @@ const GAMES = [
     id: 'sudoku',
     name: 'Sudoku',
     description: 'Fill the 9×9 grid so every row, column and box has digits 1–9.',
+    howToPlay: 'Fill in the empty cells of the 9×9 grid with digits from 1 to 9. Every row must contain digits 1–9 with no repeats. Every column must contain digits 1–9 with no repeats. Every 3×3 box must contain digits 1–9 with no repeats. Some numbers are pre-filled as clues. Click a cell then click a number to place it. A classic logic puzzle that\'s excellent for brain health!',
     icon: '🔣',
     gradient: 'from-blue-600 to-indigo-700',
     tags: ['Puzzle', 'Logic'],
@@ -212,6 +230,7 @@ const GAMES = [
     id: 'sliding',
     name: 'Sliding Puzzle',
     description: 'Slide tiles into order! Choose from 3×3, 4×4 or 5×5 grids.',
+    howToPlay: 'The numbered tiles are scrambled — slide them into the correct order (1, 2, 3... left to right, top to bottom) using the one empty space. Click any tile adjacent to the empty space to slide it into that gap. Choose your difficulty: 3×3 (8 tiles) for beginners, 4×4 (15 tiles) for a challenge, or 5×5 (24 tiles) for experts! The move counter tracks your efficiency.',
     icon: '🧩',
     gradient: 'from-teal-500 to-cyan-600',
     tags: ['Puzzle', 'Solo'],
@@ -223,6 +242,7 @@ const GAMES = [
     id: 'minesweeper',
     name: 'Minesweeper',
     description: 'Reveal all safe cells without hitting a mine. Classic puzzle!',
+    howToPlay: 'Click cells to reveal them. Numbers show how many mines are in the 8 surrounding cells — use this information to deduce where mines are hiding. Right-click (or long-press on mobile) to place a flag on a cell you think contains a mine. Reveal all non-mine cells to win! Clicking a mine ends the game. The first click is always safe.',
     icon: '💣',
     gradient: 'from-gray-600 to-slate-800',
     tags: ['Puzzle', 'Logic'],
@@ -235,6 +255,7 @@ const GAMES = [
     id: 'checkers',
     name: 'Checkers',
     description: 'Classic draughts! Jump and capture all opponent pieces to win.',
+    howToPlay: 'Move your pieces diagonally forward on the dark squares. Jump over an opponent\'s piece to capture it (removing it from the board). If you can jump, you must! Chain multiple jumps in a single turn when possible. Reach the opposite end to crown your piece a King — Kings can move and jump both forwards and backwards. Capture all opponent pieces or block them completely to win!',
     icon: '🔴',
     gradient: 'from-amber-700 to-red-800',
     tags: ['Strategy', '2-Player'],
@@ -246,6 +267,7 @@ const GAMES = [
     id: 'chess',
     name: 'Chess',
     description: 'The ultimate strategy game! Checkmate the king to win.',
+    howToPlay: 'Each piece moves differently: Pawns move forward one square (two on first move) and capture diagonally. Rooks move any number of squares horizontally or vertically. Bishops move diagonally. Knights move in an "L" shape and can jump over pieces. Queens can move any number of squares in any direction. Kings move one square in any direction. Put the opponent\'s King in checkmate to win!',
     icon: '♟',
     gradient: 'from-gray-700 to-gray-900',
     tags: ['Strategy', '2-Player'],
@@ -257,6 +279,7 @@ const GAMES = [
     id: 'ludo',
     name: 'Ludo',
     description: 'Race your tokens home! Roll dice and send opponents back to start.',
+    howToPlay: 'Roll the dice and move your coloured tokens around the board towards the home column. You need a 6 to bring a token out from the starting yard. Land on an opponent\'s token to send it back to their starting yard! Get all 4 of your tokens safely into the home triangle to win. Multiple tokens can share safe squares. A fun family game for 2-4 players!',
     icon: '🎲',
     gradient: 'from-red-600 via-yellow-500 to-green-600',
     tags: ['Family', '2-4 Players'],
@@ -268,6 +291,7 @@ const GAMES = [
     id: 'uno',
     name: 'UNO',
     description: 'Match colors and numbers! First to empty your hand wins. Don\'t forget UNO!',
+    howToPlay: 'Match the top card of the discard pile by either color or number. Play special action cards: Skip (miss a turn), Reverse (change direction), Draw Two (next player draws 2), Wild (choose any color), and Wild Draw Four (choose color + next player draws 4). When you have just one card left, shout UNO! First player to empty their hand wins the round. Watch out for Draw cards — they can turn the game around!',
     icon: '🃏',
     gradient: 'from-red-500 via-yellow-500 to-blue-500',
     tags: ['Cards', '2-4 Players'],
@@ -294,6 +318,11 @@ function AppInner() {
   const [showLogin, setShowLogin] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
+
+  if (showPrivacy) return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />;
+  if (showTerms)   return <TermsPage onBack={() => setShowTerms(false)} />;
 
   if (showAbout) {
     return <AboutPage onBack={() => setShowAbout(false)} />;
@@ -469,10 +498,20 @@ function AppInner() {
       <footer className="text-center pb-6 text-violet-300/50 text-xs px-4">
         <p>🎮 Fun Games Zone — Free games for everyone, always!</p>
         <p className="mt-1 opacity-70">Ad revenue helps keep this site free. Thank you! ❤️</p>
-        <button onClick={() => setShowAbout(true)}
-          className="mt-2 text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
-          About Us &amp; Contact
-        </button>
+        <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <button onClick={() => setShowAbout(true)}
+            className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
+            About Us
+          </button>
+          <button onClick={() => setShowPrivacy(true)}
+            className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
+            Privacy Policy
+          </button>
+          <button onClick={() => setShowTerms(true)}
+            className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
+            Terms of Service
+          </button>
+        </div>
       </footer>
     </div>
   );
