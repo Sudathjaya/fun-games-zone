@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GameCard from './components/GameCard';
 import AdBanner from './components/AdBanner';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -7,6 +7,7 @@ import ProfilePage from './components/ProfilePage';
 import AboutPage from './components/AboutPage';
 import PrivacyPolicyPage from './components/PrivacyPolicyPage';
 import TermsPage from './components/TermsPage';
+import { CATEGORY_SUMMARIES, HOME_FAQS, QUALITY_PILLARS, SITE_INFO } from './siteContent';
 import MemoryMatch from './games/MemoryMatch';
 import TicTacToe from './games/TicTacToe';
 import NumberGuessing from './games/NumberGuessing';
@@ -311,52 +312,146 @@ const FILTERS = [
   { id: 'puzzle', label: 'Puzzle',    icon: '🧩' },
 ];
 
+function parseRoute(hash) {
+  const value = hash.replace(/^#\/?/, '');
+
+  if (!value) {
+    return { page: 'home', gameId: null };
+  }
+
+  const [page, gameId] = value.split('/');
+
+  if (page === 'game' && gameId) {
+    return { page, gameId };
+  }
+
+  if (['about', 'privacy', 'terms'].includes(page)) {
+    return { page, gameId: null };
+  }
+
+  return { page: 'home', gameId: null };
+}
+
+function buildRoute(page, gameId) {
+  if (page === 'game' && gameId) {
+    return `#/game/${gameId}`;
+  }
+
+  if (page === 'home') {
+    return '#/';
+  }
+
+  return `#/${page}`;
+}
+
 function AppInner() {
   const { currentUser } = useAuth();
-  const [currentGame, setCurrentGame] = useState(null);
+  const [route, setRoute] = useState(() => parseRoute(window.location.hash));
   const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [showLogin, setShowLogin] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showTerms, setShowTerms] = useState(false);
 
-  if (showPrivacy) return <PrivacyPolicyPage onBack={() => setShowPrivacy(false)} />;
-  if (showTerms)   return <TermsPage onBack={() => setShowTerms(false)} />;
+  useEffect(() => {
+    function syncRoute() {
+      setRoute(parseRoute(window.location.hash));
+    }
 
-  if (showAbout) {
-    return <AboutPage onBack={() => setShowAbout(false)} />;
+    window.addEventListener('hashchange', syncRoute);
+    syncRoute();
+
+    return () => window.removeEventListener('hashchange', syncRoute);
+  }, []);
+
+  const selectedGame = route.page === 'game'
+    ? GAMES.find((game) => game.id === route.gameId)
+    : null;
+
+  useEffect(() => {
+    const descriptionTag = document.querySelector('meta[name="description"]');
+    let title = `${SITE_INFO.name} | Free Browser Games`;
+    let description = SITE_INFO.description;
+
+    if (route.page === 'about') {
+      title = `About | ${SITE_INFO.name}`;
+      description =
+        'Learn what Fun Games Zone offers, who it is built for, and how the site keeps its browser game library useful and family-friendly.';
+    } else if (route.page === 'privacy') {
+      title = `Privacy Policy | ${SITE_INFO.name}`;
+      description =
+        'Read how Fun Games Zone handles account data, advertising, cookies, and visitor privacy.';
+    } else if (route.page === 'terms') {
+      title = `Terms of Service | ${SITE_INFO.name}`;
+      description =
+        'Read the terms for using Fun Games Zone, including acceptable use, accounts, and advertising support.';
+    } else if (selectedGame) {
+      title = `${selectedGame.name} | ${SITE_INFO.name}`;
+      description = `${selectedGame.description} ${selectedGame.howToPlay}`;
+    }
+
+    document.title = title;
+    if (descriptionTag) {
+      descriptionTag.setAttribute('content', description);
+    }
+  }, [route.page, selectedGame]);
+
+  function navigateTo(page, gameId) {
+    const nextRoute = buildRoute(page, gameId);
+
+    if (window.location.hash === nextRoute) {
+      setRoute(parseRoute(nextRoute));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    window.location.hash = nextRoute;
   }
+
+  if (route.page === 'privacy') return <PrivacyPolicyPage onBack={() => navigateTo('home')} />;
+  if (route.page === 'terms') return <TermsPage onBack={() => navigateTo('home')} />;
+  if (route.page === 'about') return <AboutPage onBack={() => navigateTo('home')} />;
 
   if (showProfile) {
     return <ProfilePage onBack={() => setShowProfile(false)} games={GAMES} />;
   }
 
-  if (currentGame) {
-    const game = GAMES.find(g => g.id === currentGame);
-    if (game) {
-      const GameComponent = game.component;
-      return <GameComponent onBack={() => setCurrentGame(null)} game={game} />;
-    }
+  if (selectedGame) {
+    const GameComponent = selectedGame.component;
+    return <GameComponent onBack={() => navigateTo('home')} game={selectedGame} />;
   }
 
-  const filteredGames = GAMES.filter(g => g.category.includes(filter));
+  const filteredGames = GAMES.filter((game) => {
+    const matchesFilter = game.category.includes(filter);
+    const query = searchQuery.trim().toLowerCase();
+
+    if (!matchesFilter) {
+      return false;
+    }
+
+    if (!query) {
+      return true;
+    }
+
+    return [
+      game.name,
+      game.description,
+      game.howToPlay,
+      game.difficulty,
+      ...game.tags,
+      ...game.category,
+    ].some((value) => value.toLowerCase().includes(query));
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900">
 
       {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
 
-      {/* ── Top Ad Banner ── */}
-      <div className="px-3 pt-2">
-        <AdBanner size="small" slot="home-top" className="max-w-5xl mx-auto" />
-      </div>
-
       {/* ── Header ── */}
       <header className="pt-5 pb-4 px-4">
         {/* Auth bar */}
         <div className="flex justify-between items-center mb-2">
-          <button onClick={() => setShowAbout(true)}
+          <button onClick={() => navigateTo('about')}
             className="bg-white/20 hover:bg-white/30 text-white font-bold px-4 py-1.5
                        rounded-full text-sm transition-all hover:scale-105 border border-white/30">
             ℹ️ About
@@ -383,10 +478,10 @@ function AppInner() {
         </div>
         <div className="text-center">
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-2xl mb-2 leading-tight">
-            🎮 Fun Games Zone
+            🎮 {SITE_INFO.name}
           </h1>
           <p className="text-sm sm:text-xl md:text-2xl text-violet-200 font-medium">
-            Games for Everyone — Kids, Elders &amp; All Ages!
+            {SITE_INFO.tagline}
           </p>
           <div className="flex justify-center gap-2 mt-2 text-lg sm:text-2xl">
             {['⭐','🌟','✨','🌟','⭐'].map((s, i) => (
@@ -396,8 +491,64 @@ function AppInner() {
         </div>
       </header>
 
+      <section className="max-w-6xl mx-auto px-4 mb-6">
+        <div className="bg-white/10 backdrop-blur-sm rounded-3xl border border-white/20 p-5 sm:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_0.8fr] gap-6 items-start">
+            <div>
+              <h2 className="text-white text-2xl sm:text-4xl font-black leading-tight">
+                Playable games with real context, not just a thin list of tiles
+              </h2>
+              <p className="text-violet-100 mt-3 leading-relaxed max-w-3xl">
+                {SITE_INFO.name} is organized as a family-friendly browser game library. Every
+                title includes a short explanation, instructions, tags, and category placement so
+                visitors can understand what they are opening before they play.
+              </p>
+              <p className="text-white/70 mt-3 leading-relaxed max-w-3xl">
+                That extra context improves usability and also strengthens the site for AdSense
+                review because the homepage offers unique editorial value alongside the games.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: 'Games', value: SITE_INFO.gameCount },
+                { label: 'Categories', value: SITE_INFO.categoryCount },
+                { label: 'Access', value: 'Free' },
+                { label: 'Platforms', value: 'Web' },
+              ].map((item) => (
+                <div key={item.label} className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                  <div className="text-white font-black text-2xl">{item.value}</div>
+                  <div className="text-violet-300 text-xs mt-1">{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Filters ── */}
-      <div className="flex justify-center gap-2 px-4 mb-5 flex-wrap">
+      <section className="max-w-6xl mx-auto px-4 mb-5">
+        <div className="bg-white/10 rounded-3xl border border-white/15 p-4 sm:p-5">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+            <div>
+              <h2 className="text-white font-black text-xl sm:text-2xl">Explore the game library</h2>
+              <p className="text-violet-200 text-sm sm:text-base mt-1 max-w-2xl">
+                Filter by audience or game type, then search by title, tag, or instructions to
+                find the best fit for the player.
+              </p>
+            </div>
+            <label className="block lg:min-w-[320px]">
+              <span className="sr-only">Search games</span>
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search puzzles, memory, relax, kids..."
+                className="w-full rounded-2xl bg-white/90 text-slate-900 px-4 py-3 text-sm sm:text-base placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-400"
+              />
+            </label>
+          </div>
+
+          <div className="flex justify-center gap-2 flex-wrap">
         {FILTERS.map(f => (
           <button
             key={f.id}
@@ -413,29 +564,138 @@ function AppInner() {
             {f.label}
           </button>
         ))}
-      </div>
+          </div>
+
+          <p className="text-center text-white/60 text-sm mt-4">
+            Showing {filteredGames.length} {filteredGames.length === 1 ? 'game' : 'games'}
+            {searchQuery.trim() ? ` for "${searchQuery.trim()}"` : ` in ${FILTERS.find((item) => item.id === filter)?.label || 'All Games'}`}
+          </p>
+        </div>
+      </section>
 
       {/* ── Games Grid ── */}
       <main className="max-w-7xl mx-auto px-3 sm:px-4 pb-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
           {filteredGames.map((game, index) => (
             <div key={game.id} style={{ animationDelay: `${index * 0.08}s` }} className="animate-bounce-in">
-              <GameCard game={game} onPlay={() => setCurrentGame(game.id)} />
+              <GameCard game={game} onPlay={() => navigateTo('game', game.id)} />
             </div>
           ))}
         </div>
         {filteredGames.length === 0 && (
           <div className="text-center py-20 text-white/60">
             <div className="text-5xl mb-4">🎯</div>
-            <p className="text-xl font-bold">No games for this filter</p>
+            <p className="text-xl font-bold">No games match this search yet</p>
+            <p className="text-sm mt-2">Try a different keyword or switch to another category.</p>
           </div>
         )}
       </main>
+
+      <section className="max-w-6xl mx-auto px-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {CATEGORY_SUMMARIES.map((section) => (
+            <article key={section.id} className="bg-white/10 rounded-3xl p-5 border border-white/10">
+              <div className="text-3xl mb-3">{section.icon}</div>
+              <h3 className="text-white font-black text-lg">{section.title}</h3>
+              <p className="text-violet-200 text-sm leading-relaxed mt-2">{section.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* ── Mid Ad Banner ── */}
       <div className="px-3 mb-6">
         <AdBanner size="banner" slot="home-mid" className="max-w-5xl mx-auto" />
       </div>
+
+      <section className="max-w-6xl mx-auto px-4 mb-6">
+        <div className="bg-white/10 rounded-3xl border border-white/15 p-5 sm:p-8">
+          <h2 className="text-white text-2xl sm:text-3xl font-black mb-4">
+            Why this layout is better for users and for AdSense review
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {QUALITY_PILLARS.map((pillar) => (
+              <div key={pillar.title} className="bg-white/10 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-white font-bold">{pillar.title}</h3>
+                <p className="text-violet-200 text-sm leading-relaxed mt-2">{pillar.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-4 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-4">
+          <div className="bg-white/10 rounded-3xl p-5 sm:p-8 border border-white/15">
+            <h2 className="text-white text-2xl sm:text-3xl font-black mb-3">Editor notes for site quality</h2>
+            <div className="space-y-4 text-violet-100 text-sm sm:text-base leading-relaxed">
+              <p>
+                Thin-content rejections usually happen when a site feels interchangeable or
+                unfinished. A game grid by itself is often not enough. Reviewers expect to see
+                real supporting content, site ownership signals, clear navigation, and pages that
+                explain what visitors actually gain from staying on the site.
+              </p>
+              <p>
+                This homepage now does more of that work directly. It explains audience segments,
+                game types, usage expectations, and policy access. That gives users better
+                orientation and makes the site look more substantial.
+              </p>
+              <p>
+                You should still keep improving the library over time by adding original game
+                descriptions, screenshots, feature updates, and new explanatory copy whenever a
+                game changes.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/10 rounded-3xl p-5 sm:p-8 border border-white/15">
+            <h2 className="text-white text-2xl font-black mb-3">Contact and trust</h2>
+            <div className="space-y-4 text-sm text-violet-100 leading-relaxed">
+              <p>
+                <span className="text-white font-semibold">Website:</span>{' '}
+                <a
+                  href={SITE_INFO.website}
+                  className="text-violet-300 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {SITE_INFO.websiteLabel}
+                </a>
+              </p>
+              <p>
+                <span className="text-white font-semibold">Email:</span>{' '}
+                <a href={`mailto:${SITE_INFO.email}`} className="text-violet-300 underline">
+                  {SITE_INFO.email}
+                </a>
+              </p>
+              <p>
+                <span className="text-white font-semibold">Policy review date:</span>{' '}
+                {SITE_INFO.lastUpdated}
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  onClick={() => navigateTo('about')}
+                  className="bg-white/15 hover:bg-white/25 text-white font-bold px-4 py-2 rounded-full text-sm border border-white/20"
+                >
+                  About Us
+                </button>
+                <button
+                  onClick={() => navigateTo('privacy')}
+                  className="bg-white/15 hover:bg-white/25 text-white font-bold px-4 py-2 rounded-full text-sm border border-white/20"
+                >
+                  Privacy Policy
+                </button>
+                <button
+                  onClick={() => navigateTo('terms')}
+                  className="bg-white/15 hover:bg-white/25 text-white font-bold px-4 py-2 rounded-full text-sm border border-white/20"
+                >
+                  Terms of Service
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── Support / Monetization Section ── */}
       <section className="max-w-4xl mx-auto px-4 mb-6">
@@ -447,7 +707,7 @@ function AppInner() {
 
           <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-5">
             <a
-              href="https://buymeacoffee.com/sudathjaya"
+              href={SITE_INFO.buyCoffee}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300
@@ -490,24 +750,38 @@ function AppInner() {
         </div>
       </section>
 
+      <section className="max-w-6xl mx-auto px-4 mb-6">
+        <div className="bg-white/10 rounded-3xl p-5 sm:p-8 border border-white/15">
+          <h2 className="text-white text-2xl sm:text-3xl font-black mb-4">Frequently asked questions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {HOME_FAQS.map((item) => (
+              <article key={item.question} className="bg-white/10 rounded-2xl p-5 border border-white/10">
+                <h3 className="text-white font-bold">{item.question}</h3>
+                <p className="text-violet-200 text-sm leading-relaxed mt-2">{item.answer}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Bottom Ad Banner ── */}
       <div className="px-3 mb-4">
         <AdBanner size="banner" slot="home-bottom" className="max-w-5xl mx-auto" />
       </div>
 
       <footer className="text-center pb-6 text-violet-300/50 text-xs px-4">
-        <p>🎮 Fun Games Zone — Free games for everyone, always!</p>
-        <p className="mt-1 opacity-70">Ad revenue helps keep this site free. Thank you! ❤️</p>
+        <p>🎮 {SITE_INFO.name} — free browser games with guides, filters, and family-friendly navigation.</p>
+        <p className="mt-1 opacity-70">Advertising and supporter revenue help keep the site free to use.</p>
         <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1">
-          <button onClick={() => setShowAbout(true)}
+          <button onClick={() => navigateTo('about')}
             className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
             About Us
           </button>
-          <button onClick={() => setShowPrivacy(true)}
+          <button onClick={() => navigateTo('privacy')}
             className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
             Privacy Policy
           </button>
-          <button onClick={() => setShowTerms(true)}
+          <button onClick={() => navigateTo('terms')}
             className="text-violet-400 hover:text-violet-200 underline underline-offset-2 transition-colors">
             Terms of Service
           </button>

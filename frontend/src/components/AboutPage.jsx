@@ -1,197 +1,266 @@
 import React, { useState } from 'react';
-
-// ── Edit your business details here ─────────────────────────────────────────
-const BUSINESS = {
-  name:     'Fun Games Zone',
-  tagline:  'Free Games for Everyone — Kids, Elders & All Ages!',
-  mission:  `Fun Games Zone is a free-to-play web gaming platform designed for all ages.
-             Whether you're 6 or 60, we have something for you — from brain-training puzzles
-             and classic board games to relaxing bubble pops and fast-paced arcade action.
-             Our mission is simple: bring joy, fun, and mental stimulation to everyone,
-             completely free, forever.`,
-  email:    'hello@fungameszone.com',      // ← replace with your email
-  website:  'https://fungameszone.vercel.app',
-  socials: [
-    { name: 'Facebook',  icon: '📘', url: 'https://facebook.com/fungameszone' },
-    { name: 'Instagram', icon: '📸', url: 'https://instagram.com/fungameszone' },
-    { name: 'Twitter',   icon: '🐦', url: 'https://twitter.com/fungameszone' },
-    { name: 'YouTube',   icon: '▶️', url: 'https://youtube.com/@fungameszone' },
-  ],
-  buyCoffee: 'https://buymeacoffee.com/sudathjaya',
-};
+import { QUALITY_PILLARS, SITE_INFO } from '../siteContent';
 
 const STATS = [
-  { value: '22+', label: 'Free Games' },
-  { value: '7',   label: 'Categories' },
-  { value: '∞',   label: 'Fun' },
-  { value: '0',   label: 'Cost' },
+  { value: SITE_INFO.gameCount, label: 'Free Games' },
+  { value: SITE_INFO.categoryCount, label: 'Categories' },
+  { value: 'Desktop + Mobile', label: 'Devices' },
+  { value: 'All Ages', label: 'Audience' },
 ];
 
-const FEATURES = [
-  { icon: '🎮', title: 'All Ages',       desc: 'Games for kids, elders, and everyone in between' },
-  { icon: '🧠', title: 'Brain Training', desc: 'IQ puzzles, memory games, logic challenges' },
-  { icon: '😌', title: 'Stress Relief',  desc: 'Calming games and breathing exercises' },
-  { icon: '♟',  title: 'Board Games',    desc: 'Chess, Checkers, Ludo, UNO and more' },
-  { icon: '🧩', title: 'Puzzles',        desc: '2048, Sudoku, Minesweeper, Sliding Puzzle' },
-  { icon: '🏆', title: 'Leaderboards',   desc: 'Sign in and compete with players worldwide' },
+const FEATURE_BLOCKS = [
+  {
+    icon: '🎮',
+    title: 'Playable in the browser',
+    body: 'Visitors can start quickly without installing apps or creating an account first.',
+  },
+  {
+    icon: '🧠',
+    title: 'Mix of fun and focus',
+    body: 'The library balances arcade games, memory drills, puzzle solving, and calm exercises.',
+  },
+  {
+    icon: '📚',
+    title: 'Useful game context',
+    body: 'Each game includes a summary, tags, and instructions so users know what they are opening.',
+  },
+  {
+    icon: '🔒',
+    title: 'Clear site policies',
+    body: 'Privacy, terms, and contact details are available so the site looks accountable and transparent.',
+  },
 ];
 
 export default function AboutPage({ onBack }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    // Opens mailto — replace with a real form service (Formspree, EmailJS) later
-    const subject = encodeURIComponent(`Message from ${formData.name} - Fun Games Zone`);
-    const body    = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.open(`mailto:${BUSINESS.email}?subject=${subject}&body=${body}`);
+  function handleSubmit(event) {
+    event.preventDefault();
+    const subject = encodeURIComponent(`Message from ${formData.name} - ${SITE_INFO.name}`);
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`,
+    );
+
+    window.open(`mailto:${SITE_INFO.email}?subject=${subject}&body=${body}`);
     setSent(true);
     setTimeout(() => setSent(false), 4000);
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-900 via-purple-900 to-indigo-900">
-
-      {/* ── Header ── */}
       <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
-        <button onClick={onBack}
-          className="text-white/70 hover:text-white font-bold flex items-center gap-2 transition-colors">
+        <button
+          onClick={onBack}
+          className="text-white/70 hover:text-white font-bold flex items-center gap-2 transition-colors"
+        >
           ← Back
         </button>
         <h1 className="text-white font-black text-lg">About Us</h1>
-        <div className="w-16" /> {/* spacer */}
+        <div className="w-16" />
       </div>
 
-      {/* ── Hero ── */}
-      <section className="text-center px-6 py-12">
+      <section className="text-center px-6 py-12 max-w-4xl mx-auto">
         <div className="text-7xl mb-4">🎮</div>
-        <h2 className="text-white text-4xl sm:text-5xl font-black mb-3">
-          {BUSINESS.name}
-        </h2>
-        <p className="text-violet-200 text-lg sm:text-xl max-w-xl mx-auto">
-          {BUSINESS.tagline}
+        <h2 className="text-white text-4xl sm:text-5xl font-black mb-3">{SITE_INFO.name}</h2>
+        <p className="text-violet-200 text-lg sm:text-xl max-w-2xl mx-auto">
+          {SITE_INFO.tagline}
+        </p>
+        <p className="text-white/70 max-w-3xl mx-auto mt-5 leading-relaxed">
+          {SITE_INFO.name} is built as a lightweight browser game library for players who want
+          fast entertainment, family-friendly options, and repeatable puzzle or reflex
+          challenges without downloading an app. The goal is to make every visit useful, even
+          before a player presses the play button.
         </p>
       </section>
 
-      {/* ── Stats ── */}
       <section className="px-4 pb-10">
-        <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto">
-          {STATS.map(s => (
-            <div key={s.label} className="bg-white/10 rounded-2xl p-3 text-center border border-white/10">
-              <div className="text-white font-black text-2xl sm:text-3xl">{s.value}</div>
-              <div className="text-violet-300 text-xs mt-1">{s.label}</div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto">
+          {STATS.map((item) => (
+            <div
+              key={item.label}
+              className="bg-white/10 rounded-2xl p-4 text-center border border-white/10"
+            >
+              <div className="text-white font-black text-xl sm:text-2xl">{item.value}</div>
+              <div className="text-violet-300 text-xs mt-1">{item.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Mission ── */}
-      <section className="px-4 pb-10 max-w-2xl mx-auto">
+      <section className="px-4 pb-10 max-w-4xl mx-auto">
         <div className="bg-white/10 rounded-3xl p-6 border border-white/10">
-          <h3 className="text-white font-black text-xl mb-3">🚀 Our Mission</h3>
-          <p className="text-violet-200 leading-relaxed whitespace-pre-line">
-            {BUSINESS.mission}
-          </p>
+          <h3 className="text-white font-black text-xl mb-3">Why This Site Exists</h3>
+          <div className="space-y-4 text-violet-100 leading-relaxed">
+            <p>
+              Some visitors want quick brain training. Others want a familiar board game, a
+              low-pressure puzzle, or a simple activity they can share with family. Fun Games
+              Zone groups those needs into one place with short explanations, clear difficulty
+              labels, and easy browsing by audience or category.
+            </p>
+            <p>
+              That structure matters for quality. A game site should not feel like a thin shell
+              around ad slots. It should explain what is available, who it is useful for, and
+              how the experience works on real devices.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section className="px-4 pb-10 max-w-2xl mx-auto">
-        <h3 className="text-white font-black text-xl mb-4 text-center">What We Offer</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {FEATURES.map(f => (
-            <div key={f.title} className="bg-white/10 rounded-2xl p-4 border border-white/10 flex gap-3 items-start">
-              <span className="text-2xl">{f.icon}</span>
+      <section className="px-4 pb-10 max-w-4xl mx-auto">
+        <h3 className="text-white font-black text-xl mb-4 text-center">What Visitors Get</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {FEATURE_BLOCKS.map((item) => (
+            <div
+              key={item.title}
+              className="bg-white/10 rounded-2xl p-5 border border-white/10 flex gap-3 items-start"
+            >
+              <span className="text-2xl">{item.icon}</span>
               <div>
-                <div className="text-white font-bold text-sm">{f.title}</div>
-                <div className="text-violet-300 text-xs mt-0.5">{f.desc}</div>
+                <div className="text-white font-bold text-sm">{item.title}</div>
+                <div className="text-violet-300 text-sm mt-1 leading-relaxed">{item.body}</div>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Social Links ── */}
-      <section className="px-4 pb-10 max-w-2xl mx-auto">
-        <h3 className="text-white font-black text-xl mb-4 text-center">Follow Us</h3>
-        <div className="grid grid-cols-2 gap-3">
-          {BUSINESS.socials.map(s => (
-            <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/10
-                         rounded-2xl px-4 py-3 transition-all hover:scale-105 group">
-              <span className="text-2xl">{s.icon}</span>
-              <span className="text-white font-bold text-sm group-hover:text-violet-200">{s.name}</span>
-            </a>
+      <section className="px-4 pb-10 max-w-4xl mx-auto">
+        <h3 className="text-white font-black text-xl mb-4 text-center">Quality Standards</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {QUALITY_PILLARS.map((pillar) => (
+            <div key={pillar.title} className="bg-white/10 rounded-2xl p-5 border border-white/10">
+              <h4 className="text-white font-bold">{pillar.title}</h4>
+              <p className="text-violet-200 text-sm leading-relaxed mt-2">{pillar.body}</p>
+            </div>
           ))}
-          <a href={BUSINESS.buyCoffee} target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30
-                       rounded-2xl px-4 py-3 transition-all hover:scale-105 col-span-2 justify-center">
-            <span className="text-2xl">☕</span>
-            <span className="text-yellow-300 font-black">Buy Us a Coffee</span>
-          </a>
         </div>
       </section>
 
-      {/* ── Contact Form ── */}
+      <section className="px-4 pb-10 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-white/10 rounded-3xl p-6 border border-white/10">
+            <h3 className="text-white font-black text-xl mb-3">Site Details</h3>
+            <div className="space-y-3 text-sm text-violet-100">
+              <p>
+                <span className="text-white font-semibold">Website:</span>{' '}
+                <a
+                  href={SITE_INFO.website}
+                  className="text-violet-300 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {SITE_INFO.websiteLabel}
+                </a>
+              </p>
+              <p>
+                <span className="text-white font-semibold">Contact:</span>{' '}
+                <a href={`mailto:${SITE_INFO.email}`} className="text-violet-300 underline">
+                  {SITE_INFO.email}
+                </a>
+              </p>
+              <p>
+                <span className="text-white font-semibold">Monetization:</span> advertising and
+                optional supporter donations help keep the games free to access.
+              </p>
+              <p>
+                <span className="text-white font-semibold">Last policy review:</span>{' '}
+                {SITE_INFO.lastUpdated}
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/10 rounded-3xl p-6 border border-white/10">
+            <h3 className="text-white font-black text-xl mb-3">Support the Project</h3>
+            <p className="text-violet-100 text-sm leading-relaxed">
+              The site is intended to stay free. If visitors find the games useful, they can
+              share the site or support it directly.
+            </p>
+            <a
+              href={SITE_INFO.buyCoffee}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded-2xl px-4 py-3 transition-all"
+            >
+              <span className="text-2xl">☕</span>
+              <span className="text-yellow-200 font-black">Buy Us a Coffee</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section className="px-4 pb-12 max-w-lg mx-auto">
-        <h3 className="text-white font-black text-xl mb-4 text-center">📬 Get in Touch</h3>
+        <h3 className="text-white font-black text-xl mb-4 text-center">Get in Touch</h3>
         <div className="bg-white/10 rounded-3xl p-6 border border-white/10">
           {sent ? (
             <div className="text-center py-6">
               <div className="text-4xl mb-2">✅</div>
-              <p className="text-green-400 font-black text-lg">Message sent!</p>
-              <p className="text-white/60 text-sm mt-1">We'll get back to you soon.</p>
+              <p className="text-green-400 font-black text-lg">Message prepared</p>
+              <p className="text-white/60 text-sm mt-1">Your email app should open next.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
-                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">Your Name</label>
+                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">
+                  Your Name
+                </label>
                 <input
-                  type="text" required placeholder="John Doe"
+                  type="text"
+                  required
+                  placeholder="John Doe"
                   value={formData.name}
-                  onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3
-                             text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm"
+                  onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm"
                 />
               </div>
               <div>
-                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">Email</label>
+                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">
+                  Email
+                </label>
                 <input
-                  type="email" required placeholder="you@example.com"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
                   value={formData.email}
-                  onChange={e => setFormData(p => ({ ...p, email: e.target.value }))}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3
-                             text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm"
+                  onChange={(event) => setFormData((prev) => ({ ...prev, email: event.target.value }))}
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm"
                 />
               </div>
               <div>
-                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">Message</label>
+                <label className="text-white/60 text-xs font-bold uppercase tracking-wide block mb-1">
+                  Message
+                </label>
                 <textarea
-                  required rows={4} placeholder="Your message..."
+                  required
+                  rows={4}
+                  placeholder="Your message..."
                   value={formData.message}
-                  onChange={e => setFormData(p => ({ ...p, message: e.target.value }))}
-                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3
-                             text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm resize-none"
+                  onChange={(event) => setFormData((prev) => ({ ...prev, message: event.target.value }))}
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:border-violet-400 text-sm resize-none"
                 />
               </div>
-              <button type="submit"
-                className="bg-violet-600 hover:bg-violet-500 text-white font-black py-3 rounded-xl
-                           transition-all hover:scale-105 active:scale-95">
+              <button
+                type="submit"
+                className="bg-violet-600 hover:bg-violet-500 text-white font-black py-3 rounded-xl transition-all hover:scale-105 active:scale-95"
+              >
                 Send Message →
               </button>
-              <p className="text-white/30 text-xs text-center">
-                Or email directly: <a href={`mailto:${BUSINESS.email}`}
-                  className="text-violet-400 hover:underline">{BUSINESS.email}</a>
+              <p className="text-white/40 text-xs text-center">
+                Direct email:{' '}
+                <a href={`mailto:${SITE_INFO.email}`} className="text-violet-300 hover:underline">
+                  {SITE_INFO.email}
+                </a>
               </p>
             </form>
           )}
         </div>
       </section>
 
-      {/* ── Footer ── */}
       <div className="text-center pb-8 text-violet-300/40 text-xs px-4">
-        <p>© 2025 {BUSINESS.name} — Free games for everyone, always!</p>
+        <p>
+          © {SITE_INFO.copyrightYear} {SITE_INFO.name}. Free browser games with clear guidance
+          and family-friendly navigation.
+        </p>
       </div>
     </div>
   );
